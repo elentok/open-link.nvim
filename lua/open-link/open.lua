@@ -41,6 +41,11 @@ local function open(link)
     link = vim.fn.expand("<cfile>")
   end
 
+  if vim.regex("^\\s*$"):match_str(link) then
+    vim.notify("No link was found at the cursor.", vim.log.levels.WARN)
+    return
+  end
+
   link = expand(link)
 
   if not is_http_link(link) then
