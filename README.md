@@ -8,22 +8,7 @@ IDs and Github pull requests from my notes (or code comments) without writing
 the entire URL.
 
 For example, pressing `ge` while standing on MYJIRAPROJ-1234 will open the
-ticket in the browser. This is done by specifying a link expander:
-
-```lua
-opts = {
-  expanders = {
-    {
-      pattern = "^MYJIRAPROJ-",
-      replacement = "https://myjira.jira.com/MYJIRAPROJ-",
-    },
-    {
-      pattern = "^format-on-save#",
-      replacement = "https://github.com/elentok/format-on-save.nvim/pull/",
-    }
-  }
-}
-```
+ticket in the browser. See example below.
 
 ## Installation
 
@@ -32,7 +17,22 @@ Using [Lazy](https://github.com/folke/lazy.nvim):
 ```lua
 {
   "elentok/open-link.nvim",
-  opts = {},
+  init = function()
+    local expanders = require("open-link.expanders")
+    require("open-link").setup({
+      expanders = {
+        -- expands "{user}/{repo}" to the github repo URL
+        expanders.github,
+
+        -- expands "format-on-save#15" the issue/pr #15 in the specified github project
+        -- ("format-on-save" is the shortcut/keyword)
+        expanders.github_issue_or_pr("format-on-save", "elentok/format-on-save.nvim"),
+
+        -- expands "MYJIRA-1234" and "myotherjira-1234" to the specified Jira URL
+        expanders.jira("https://myjira.atlassian.net/browse/", { "myjira", "myotherjira"})
+      },
+    })
+  end,
   cmd = { "OpenLink" },
   dependencies = {
     "ojroques/nvim-osc52",

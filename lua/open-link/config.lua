@@ -1,10 +1,4 @@
----@class RegexLinkExpander
----@field pattern string
----@field replacement string
---
----@alias FnLinkExpander fun(string):string
-
----@alias LinkExpander FnLinkExpander|RegexLinkExpander
+---@alias LinkExpander fun(string):(string|nil)
 
 ---@class OpenLinkConfig
 ---@field expanders LinkExpander[]
