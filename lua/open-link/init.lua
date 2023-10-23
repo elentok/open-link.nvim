@@ -2,8 +2,8 @@ local config = require("open-link.config")
 local open = require("open-link.open")
 
 ---@class SetupOptions
----@field expanders? LinkExpander[]
----@field appendExpanders? LinkExpander[]
+---@field expanders? LinkExpander[] Replaces all of the expanders
+---@field addExpanders? LinkExpander[] Adds to the existing expanders
 
 ---@param opts SetupOptions
 local function setup(opts)
@@ -11,8 +11,8 @@ local function setup(opts)
     config.expanders = opts.expanders
   end
 
-  if opts.appendExpanders ~= nil then
-    vim.list_extend(config.expanders, opts.appendExpanders)
+  if opts.addExpanders ~= nil then
+    vim.list_extend(config.expanders, opts.addExpanders)
   end
 
   vim.api.nvim_create_user_command("OpenLink", function()
@@ -20,4 +20,9 @@ local function setup(opts)
   end, {})
 end
 
-return { setup = setup, open = open }
+---@param ... LinkExpander[]
+local function addExpanders(...)
+  vim.list_extend(config.expanders, { ... })
+end
+
+return { setup = setup, open = open, addExpanders = addExpanders }
