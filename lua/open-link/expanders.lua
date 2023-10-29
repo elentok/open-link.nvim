@@ -37,7 +37,7 @@ local function github_issue_or_pr(keyword, github_project)
   return function(link)
     return vim.fn.substitute(
       link,
-      "\\v\\c^" .. keyword .. "#(\\d+)$",
+      "\\v\\c^" .. keyword .. "#(\\d+)",
       "https://github.com/" .. github_project .. "/pull/\\1",
       ""
     )
