@@ -44,4 +44,19 @@ local function github_issue_or_pr(keyword, github_project)
   end
 end
 
-return { regex = regex, github = github, jira = jira, github_issue_or_pr = github_issue_or_pr }
+-- Expand ~/path/to/file to file://{HOME}/path/to/file
+local function homedir()
+  return function(link)
+    if vim.startswith(link, "~") then
+      return "file://" .. os.getenv("HOME") .. link:sub(2)
+    end
+  end
+end
+
+return {
+  regex = regex,
+  github = github,
+  jira = jira,
+  github_issue_or_pr = github_issue_or_pr,
+  homedir = homedir,
+}
