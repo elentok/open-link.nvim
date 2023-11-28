@@ -37,6 +37,16 @@ local function browse(link)
   end
 end
 
+--- If the link is a path relative to the current file that exists,
+--- it will return the full path (prefixed with "file://")
+---@param link string
+local function find_abs_path(link)
+  local path = vim.fn.resolve(vim.fn.expand("%:p:h") .. "/" .. link)
+  if vim.fn.filereadable(path) then
+    return "file://" .. path
+  end
+end
+
 ---@param link? string
 local function open(link)
   if link == nil then
@@ -51,7 +61,12 @@ local function open(link)
   link = expand(link)
 
   if not is_http_or_file_link(link) then
-    link = "http://" .. link
+    local path_to_file = find_abs_path(link)
+    if path_to_file ~= nil then
+      link = path_to_file
+    else
+      link = "http://" .. link
+    end
   end
 
   browse(link)
