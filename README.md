@@ -10,6 +10,11 @@ the entire URL.
 For example, pressing `ge` while standing on MYJIRAPROJ-1234 will open the
 ticket in the browser. See example below.
 
+## Bonus feature: create link from image in clipboard
+
+You can use the `:PasteImage` command to paste an image from the clipboard to a
+file and add a markdown link to that image (`![file.png](file.png)`).
+
 ## Installation
 
 Using [Lazy](https://github.com/folke/lazy.nvim):
@@ -44,7 +49,12 @@ Using [Lazy](https://github.com/folke/lazy.nvim):
         require("open-link").open()
       end,
       desc = "Open the link under the cursor"
-    }
+    },
+    {
+      "<Leader>ip",
+      "<cmd>PasteImage<cr>",
+      desc = "Paste image from clipboard",
+    },
   }
 }
 ```

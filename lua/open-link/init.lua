@@ -1,5 +1,6 @@
 local config = require("open-link.config")
 local open = require("open-link.open")
+local pasteImage = require("open-link.paste-image")
 
 ---@class SetupOptions
 ---@field expanders? LinkExpander[] Replaces all of the expanders
@@ -12,6 +13,10 @@ local function setup(opts)
 
   vim.api.nvim_create_user_command("OpenLink", function()
     open()
+  end, {})
+
+  vim.api.nvim_create_user_command("PasteImage", function()
+    pasteImage()
   end, {})
 end
 
