@@ -38,16 +38,14 @@ Using [Lazy](https://github.com/folke/lazy.nvim):
       },
     })
   end,
-  cmd = { "OpenLink" },
+  cmd = { "OpenLink", "PasteImage" },
   dependencies = {
     "ojroques/nvim-osc52",
   },
   keys = {
     {
       "ge",
-      function()
-        require("open-link").open()
-      end,
+      "<cmd>OpenLink<cr>",
       desc = "Open the link under the cursor"
     },
     {
