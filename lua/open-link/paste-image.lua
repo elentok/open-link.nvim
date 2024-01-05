@@ -1,6 +1,15 @@
 local h = require("open-link.helpers")
 local escape = vim.fn.shellescape
 
+local function verifyWlPaste()
+  if h.hasCommand("wl-paste") then
+    return true
+  end
+
+  vim.notify("wl-paste is missing, please install the 'wl-clipboard' package", vim.log.levels.ERROR)
+  return false
+end
+
 local function verifyPngPaste()
   if h.hasCommand("pngpaste") then
     return true
@@ -33,12 +42,17 @@ local function optimizeImage(filepath)
 end
 
 ---@param filepath string
+---@return boolean
 local function pasteImageToFile(filepath)
   local sys = vim.loop.os_uname().sysname
   if sys == "Darwin" then
     return verifyPngPaste() and h.runShell("pngpaste " .. escape(filepath))
   elseif sys == "Linux" then
-    return h.runShell("xclip -selection clipboard -t image/png -o > " .. escape(filepath))
+    if vim.env.XDG_SESSION_TYPE == "wayland" then
+      return verifyWlPaste() and h.runShell("wl-paste -t image/png > " .. escape(filepath))
+    else
+      return h.runShell("xclip -selection clipboard -t image/png -o > " .. escape(filepath))
+    end
   else
     vim.notify("Currently only Mac and Linux are supported", vim.log.levels.ERROR)
     return false
