@@ -1,13 +1,21 @@
 local h = require("open-link.helpers")
 local escape = vim.fn.shellescape
 
-local function verifyWlPaste()
+---@return string|nil
+local function findWlPaste()
   if h.hasCommand("wl-paste") then
-    return true
+    return "wl-paste"
   end
 
-  vim.notify("wl-paste is missing, please install the 'wl-clipboard' package", vim.log.levels.ERROR)
-  return false
+  if h.hasCommand("wl-clip.paste") then
+    return "wl-clip.paste"
+  end
+
+  vim.notify(
+    "wl-paste is missing, please install the 'wl-clipboard' package (or 'wl-clip' via snap)",
+    vim.log.levels.ERROR
+  )
+  return nil
 end
 
 local function verifyPngPaste()
@@ -43,16 +51,26 @@ end
 
 ---@param filepath string
 ---@return boolean
+local function pasteImageToFileInLinux(filepath)
+  if vim.env.XDG_SESSION_TYPE == "wayland" then
+    local wlPaste = findWlPaste()
+    if wlPaste == nil then
+      return false
+    end
+    return h.runShell(wlPaste .. " -t image/png > " .. escape(filepath))
+  end
+
+  return h.runShell("xclip -selection clipboard -t image/png -o > " .. escape(filepath))
+end
+
+---@param filepath string
+---@return boolean
 local function pasteImageToFile(filepath)
   local sys = vim.loop.os_uname().sysname
   if sys == "Darwin" then
     return verifyPngPaste() and h.runShell("pngpaste " .. escape(filepath))
   elseif sys == "Linux" then
-    if vim.env.XDG_SESSION_TYPE == "wayland" then
-      return verifyWlPaste() and h.runShell("wl-paste -t image/png > " .. escape(filepath))
-    else
-      return h.runShell("xclip -selection clipboard -t image/png -o > " .. escape(filepath))
-    end
+    return pasteImageToFileInLinux(filepath)
   else
     vim.notify("Currently only Mac and Linux are supported", vim.log.levels.ERROR)
     return false
