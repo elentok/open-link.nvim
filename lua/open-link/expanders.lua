@@ -4,7 +4,7 @@ local function regex(pattern, replacement)
   end
 end
 
-local github_regex = vim.regex("\\v^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$")
+local github_regex = vim.regex("\\v^[a-zA-Z0-9_-]+/[.a-zA-Z0-9_-]+$")
 
 ---@param link string
 ---@return string|nil
