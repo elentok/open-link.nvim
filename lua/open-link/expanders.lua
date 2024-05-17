@@ -9,9 +9,7 @@ local github_regex = vim.regex("\\v^[a-zA-Z0-9_-]+/[.a-zA-Z0-9_-]+$")
 ---@param link string
 ---@return string|nil
 local function github(link)
-  put("github: is match?")
   if github_regex:match_str(link) then
-    put("[elentok] [expanders.lua] github", "is match!")
     return "https://github.com/" .. link
   end
 end
