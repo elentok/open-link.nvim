@@ -37,6 +37,12 @@ local function findAbsPath(link)
   end
 end
 
+local function isHttpOrFileLink(link)
+  return vim.startswith(link, "http://")
+    or vim.startswith(link, "https://")
+    or vim.startswith(link, "file://")
+end
+
 return {
   fileExists = fileExists,
   hasCommand = hasCommand,
@@ -44,4 +50,5 @@ return {
   runShell = runShell,
   relativeToBuffer = relativeToBuffer,
   findAbsPath = findAbsPath,
+  isHttpOrFileLink = isHttpOrFileLink,
 }

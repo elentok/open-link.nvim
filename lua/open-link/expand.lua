@@ -11,9 +11,11 @@ local function expand(link)
     end
   end
 
-  local path_to_file = helpers.findAbsPath(link)
-  if path_to_file ~= nil then
-    return path_to_file
+  if not helpers.isHttpOrFileLink(link) then
+    local path_to_file = helpers.findAbsPath(link)
+    if path_to_file ~= nil then
+      return path_to_file
+    end
   end
 
   return link

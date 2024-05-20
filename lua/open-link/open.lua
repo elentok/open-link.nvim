@@ -1,12 +1,6 @@
 local expand = require("open-link.expand")
 local helpers = require("open-link.helpers")
 
-local function is_http_or_file_link(link)
-  return vim.startswith(link, "http://")
-    or vim.startswith(link, "https://")
-    or vim.startswith(link, "file://")
-end
-
 ---@param command string
 ---@param link string
 local function exec(command, link)
@@ -51,7 +45,7 @@ local function open(link)
 
   link = expand(link)
 
-  if not is_http_or_file_link(link) then
+  if not helpers.isHttpOrFileLink(link) then
     link = "http://" .. link
   end
 
