@@ -22,7 +22,8 @@ end
 local function browse(link)
   if vim.env.SSH_TTY ~= nil then
     vim.notify("Link copied to clipboard.")
-    require("osc52").copy()
+    vim.fn.setreg("*", link)
+    vim.fn.setreg("+", link)
   elseif vim.fn.has("wsl") == 1 then
     exec("explorer.exe", link)
   elseif vim.fn.has("macunix") == 1 then

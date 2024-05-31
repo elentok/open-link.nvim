@@ -39,9 +39,6 @@ Using [Lazy](https://github.com/folke/lazy.nvim):
     })
   end,
   cmd = { "OpenLink", "PasteImage" },
-  dependencies = {
-    "ojroques/nvim-osc52",
-  },
   keys = {
     {
       "ge",
