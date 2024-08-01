@@ -43,6 +43,14 @@ local function isHttpOrFileLink(link)
     or vim.startswith(link, "file://")
 end
 
+---@return string
+local function getScriptPath()
+  local info = debug.getinfo(2, "S")
+  local script_path = info.source:sub(2)
+  local script_dir = vim.fn.fnamemodify(script_path, ":p:h")
+  return script_dir
+end
+
 return {
   fileExists = fileExists,
   hasCommand = hasCommand,
@@ -51,4 +59,5 @@ return {
   relativeToBuffer = relativeToBuffer,
   findAbsPath = findAbsPath,
   isHttpOrFileLink = isHttpOrFileLink,
+  getScriptPath = getScriptPath,
 }

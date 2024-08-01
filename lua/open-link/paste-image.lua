@@ -1,6 +1,11 @@
 local h = require("open-link.helpers")
 local escape = vim.fn.shellescape
 
+local function findPngPasteScriptPath()
+  local scriptPath = h.getScriptPath()
+  return scriptPath .. "/../../scripts/pngpaste-mac"
+end
+
 ---@return string|nil
 local function findWlPaste()
   if h.hasCommand("wl-paste") then
@@ -16,29 +21,6 @@ local function findWlPaste()
     vim.log.levels.ERROR
   )
   return nil
-end
-
-local function verifyPngPaste()
-  if h.hasCommand("pngpaste") then
-    return true
-  end
-
-  if not h.confirm("pngpaste is missing, run 'brew install pngpaste'?") then
-    return false
-  end
-
-  vim.fn.system("brew install pngpaste")
-  if vim.v.shell_error ~= 0 then
-    vim.notify("Failed to install pngpaste", vim.log.levels.ERROR)
-    return false
-  end
-
-  if h.hasCommand("pngpaste") then
-    return true
-  end
-
-  vim.notify("Install pngpaste but its not found in PATH", vim.log.levels.ERROR)
-  return false
 end
 
 local function optimizeImage(filepath)
@@ -68,7 +50,7 @@ end
 local function pasteImageToFile(filepath)
   local sys = vim.loop.os_uname().sysname
   if sys == "Darwin" then
-    return verifyPngPaste() and h.runShell("pngpaste " .. escape(filepath))
+    return h.runShell(findPngPasteScriptPath() .. " " .. escape(filepath))
   elseif sys == "Linux" then
     return pasteImageToFileInLinux(filepath)
   else
