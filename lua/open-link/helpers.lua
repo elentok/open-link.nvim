@@ -41,6 +41,7 @@ local function isHttpOrFileLink(link)
   return vim.startswith(link, "http://")
     or vim.startswith(link, "https://")
     or vim.startswith(link, "file://")
+    or vim.startswith(link, "/")
 end
 
 ---@return string
