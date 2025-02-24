@@ -31,4 +31,9 @@ local function addExpanders(...)
   vim.list_extend(config.expanders, { ... })
 end
 
-return { setup = setup, open = open, addExpanders = addExpanders }
+---@param ... LinkExpander[]
+local function prependExpanders(...)
+  config.expanders = vim.list_extend({...}, config.expanders)
+end
+
+return { setup = setup, open = open, addExpanders = addExpanders, prependExpanders = prependExpanders }
