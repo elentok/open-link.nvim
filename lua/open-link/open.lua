@@ -41,7 +41,7 @@ local function open(link)
 
   if vim.regex("^\\s*$"):match_str(link) then
     vim.notify("No link was found at the cursor.", vim.log.levels.WARN)
-    return
+    return false
   end
 
   link = expand(link)
