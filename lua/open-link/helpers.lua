@@ -1,3 +1,5 @@
+local config = require("open-link.config")
+
 ---@param filepath string
 ---@return boolean
 local function fileExists(filepath)
@@ -37,7 +39,13 @@ local function findAbsPath(link)
   end
 end
 
+---@param link string
 local function isHttpOrFileLink(link)
+  for _, prefix in ipairs(config.extraLinkPrefixes) do
+    if vim.startswith(link, prefix) then
+      return true
+    end
+  end
   return vim.startswith(link, "http://")
     or vim.startswith(link, "https://")
     or vim.startswith(link, "file://")
