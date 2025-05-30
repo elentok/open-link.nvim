@@ -6,6 +6,7 @@ local extendVimUiOpen = require("open-link.extend-vim-ui-open")
 ---@class SetupOptions
 ---@field expanders? LinkExpander[] Replaces all of the expanders
 ---@field extendVimUiOpen? boolean Wrap vim.ui.open (default = true)
+---@field extraLinkPrefixes? string[] Additional prefixes to be considered links (default = {})
 
 ---@param opts SetupOptions
 local function setup(opts)
@@ -15,6 +16,10 @@ local function setup(opts)
 
   if opts.extendVimUiOpen ~= false then
     extendVimUiOpen()
+  end
+
+  if opts.extraLinkPrefixes ~= nil then
+    vim.list_extend(config.extraLinkPrefixes, opts.extraLinkPrefixes)
   end
 
   vim.api.nvim_create_user_command("OpenLink", function()
